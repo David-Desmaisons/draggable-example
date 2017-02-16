@@ -1,6 +1,6 @@
 # draggable-example
 
-> A Vue.js project
+> Example usage of [vue.draggable](https://github.com/SortableJS/Vue.Draggable)
 
 ## Build Setup
 
@@ -15,4 +15,3 @@ npm run dev
 npm run build
 ```
 
-For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
