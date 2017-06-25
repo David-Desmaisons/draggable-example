@@ -11,7 +11,7 @@
   "dependencies": {
     "bootstrap": "^3.3.7",
     "vue": "^2.1.0",
-    "vuedraggable": "^2.14.0"
+    "vuedraggable": "^2.14.1"
   },
   "devDependencies": {
     "autoprefixer": "^6.4.0",
