@@ -4,6 +4,10 @@
 
 ![demo gif](example.gif)
 
+## Live demo
+
+https://david-desmaisons.github.io/draggable-example/
+
 ## Build Setup
 
 ``` bash
