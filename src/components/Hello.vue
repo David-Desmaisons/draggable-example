@@ -2,7 +2,7 @@
   <div class="fluid container">
     <div class="form-group form-group-lg panel panel-default">
       <div class="panel-heading">
-        <h3 class="panel-title">Sortbale control</h3>
+        <h3 class="panel-title">Sortable control</h3>
       </div>
       <div class="panel-body">
         <div class="checkbox">
