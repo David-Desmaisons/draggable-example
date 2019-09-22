@@ -15,7 +15,7 @@
     "bootstrap": "^3.3.7",
     "font-awesome": "^4.7.0",
     "vue": "^2.5.17",
-    "vuedraggable": "^2.19.3"
+    "vuedraggable": "^2.23.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.0.0",
