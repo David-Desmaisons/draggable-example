@@ -1,16 +1,10 @@
-# draggable-example
+# nav-builder
 
-> Example usage of [vue.draggable](https://github.com/SortableJS/Vue.Draggable)
-
-![demo gif](example.gif)
-
-## Live demo
-
-https://david-desmaisons.github.io/draggable-example/
+> A navigation builder utilizing [vue.draggable](https://github.com/SortableJS/Vue.Draggable)
 
 ## Build Setup
 
-``` bash
+```bash
 # install dependencies
 npm install
 
