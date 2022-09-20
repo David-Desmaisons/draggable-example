@@ -11,7 +11,7 @@
             <label for="newNavItem" class="block text-gray-500 font-bold mb-1 md:mb-0 pr-4">
                 Nav Item <small style="color: red;" v-html="newNavItemError"></small>
               </label>
-              <input v-model="newNavItem" type="text" v-on:keyup.enter="addNewNavItem" id="newNavItem" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500">
+              <input v-model="newNavItem" type="text" @keyup.enter="addNewNavItem" id="newNavItem" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500">
             </div>
             <div class="md:w-1/3">
               <button type="button" @click="addNewNavItem" class="inline-flex items-center ml-5 mt-8 px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-base text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300 disabled:opacity-25 transition">Add new nav item</button>
@@ -20,104 +20,60 @@
         </div>
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 sm:gap-4">
+      <!-- TODO: Delete navItems, and make new links look good -->
 
+      <draggable class="list-group child" tag="span" v-model="nav" v-bind="dragOptionsParent" :move="onMove" @start="isDragging=true" @end="isDragging=false">
+        <transition-group class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 sm:gap-4 p-4" type="transition" :name="'navs'" tag="div">
+        
+          <!-- Menu -->
+          <div class="list-group-item parent" v-for="(subnav, navIndex) in nav" :key="navIndex">
+            <i class="fa-regular fa-folder-open"></i> {{ nav[navIndex].title }}
 
-        <!-- <draggable class="list-group child" tag="span" v-model="nav" v-bind="dragOptions" :move="onMove" @start="isDragging=true" @end="isDragging=false"> -->
-          <!-- <transition-group type="transition" :name="'navs'" tag="div"> -->
-            
-            <!-- <li class="list-group-item" v-for="item in nav[navItem].links" :key="item.id">
-              <i class="fa-solid fa-grip-vertical mr-3"></i>
-              {{item.title}} 
-              <a :href="item.href" target="_blank" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-base text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300 focus:text-white hover:text-white disabled:opacity-25 transition">Open</a>
-              <i class="fa-solid fa-trash" @click="deleteLink(navItem, item.id)"></i>
-              <span class="badge">{{item.id}}</span>
-            </li> -->
+            <h2>New Link</h2>
 
-            <!-- <li class="list-group-item" v-for="a in nav" :key="a.id"> -->
-          
-              <!-- Menu -->
-              <div class="list-group-item parent" v-for="(subnav, navItem) in nav" :key="navItem">
-                <i class="fa-regular fa-folder-open"></i> {{ nav[navItem].title }}
-
-                <h2>New Link</h2>
-
-                <div v-if="nav[navItem].links.length > 10">
-                  <div class="bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4" role="alert">
-                    <p class="font-bold">Woah. This is starting to get big...</p>
-                    <p>You might confuse and frustrate users with too many links in your menus. Can you simplify it?</p>
-                  </div>
-                </div>
-
-                <details>
-                  <summary>Open New Link Section</summary>
-
-                  <div style="color: red;" :v-if="nav[navItem].newLink['error'].length > 0">
-                    {{ nav[navItem].newLink['error'] }}
-                  </div>
-
-                  <label for="linkTitle">Link Title</label>
-                  <input id="linkTitle" v-model="nav[navItem].newLink['title']" type="text" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500">
-
-                  <label for="linkHref">URL</label>
-                  <input id="linkHref" v-model="nav[navItem].newLink['href']" type="text" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500">
-
-                  <input id="linkNewTab" v-model="nav[navItem].newLink['target']" type="checkbox" class="leading-tight">
-                  <label for="linkNewTab" class="ml-2">Open in new tab</label>
-                  <div>
-                    <button @click="addNewLink(navItem, $event)" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-base text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300 disabled:opacity-25 transition">Add new link</button>
-                  </div>
-                </details>
-
-                <draggable class="list-group child" tag="span" v-model="nav[navItem].links" v-bind="dragOptions" :move="onMove" @start="isDragging=true" @end="isDragging=false">
-                  <transition-group type="transition" :name="'nav-list'" tag="ul">
-                    <li class="list-group-item" v-for="item in nav[navItem].links" :key="item.id">
-                      <i class="fa-solid fa-grip-vertical mr-3"></i>
-                      {{item.title}} 
-                      <a :href="item.href" target="_blank" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-base text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300 focus:text-white hover:text-white disabled:opacity-25 transition">Open</a>
-                      <i class="fa-solid fa-trash" @click="deleteLink(navItem, item.id)"></i>
-                      <!-- <span class="badge">{{item.id}}</span> -->
-                    </li>
-                  </transition-group>
-                </draggable>
+            <div v-if="nav[navIndex].links.length > 10">
+              <div class="bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4" role="alert">
+                <p class="font-bold">Woah. This is starting to get big...</p>
+                <p>You might confuse and frustrate users with too many links in your menus. Can you simplify it?</p>
               </div>
-              <!-- End Menu -->
+            </div>
 
-            <!-- </li> -->
+            <details>
+              <summary>Open New Link Section</summary>
 
-          <!-- </transition-group> -->
-        <!-- </draggable> -->
+              <div style="color: red;" :v-if="nav[navIndex].newLink.error.length > 0">
+                {{ nav[navIndex].newLink['error'] }}
+              </div>
 
+              <label :for="'linkTitle-'+navIndex">Link Title</label>
+              <input :id="'linkTitle-'+navIndex" @keyup.enter="addNewLink(navIndex)" v-model="nav[navIndex].newLink['title']" type="text" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500">
 
+              <label :for="'linkHref-'+navIndex">URL</label>
+              <input :id="'linkHref-'+navIndex" @keyup.enter="addNewLink(navIndex)" v-model="nav[navIndex].newLink['href']" type="text" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500">
 
+              <input :id="'linkNewTab-'+navIndex" @keyup.enter="addNewLink(navIndex)" v-model="nav[navIndex].newLink['target']" type="checkbox" class="leading-tight">
+              <label :for="'linkNewTab-'+navIndex" class="ml-2">Open in new tab</label>
+              <div>
+                <button @click="addNewLink(navIndex)" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-base text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300 disabled:opacity-25 transition">Add new link</button>
+              </div>
+            </details>
 
-      </div>
+            <draggable class="list-group child" tag="span" v-model="nav[navIndex].links" v-bind="dragOptionsChild" :move="onMove" @start="isDragging=true" @end="isDragging=false">
+              <transition-group type="transition" :name="'nav-list'" tag="ul">
+                <li class="list-group-item" v-for="item in nav[navIndex].links" :key="item.id">
+                  <i class="fa-solid fa-grip-vertical mr-3"></i>
+                  {{item.title}} 
+                  <a :href="item.href" target="_blank" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-base text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300 focus:text-white hover:text-white disabled:opacity-25 transition">Open</a>
+                  <i class="fa-solid fa-trash" @click="deleteLink(navIndex, item.id)"></i>
+                  <!-- <span class="badge">{{item.id}}</span> -->
+                </li>
+              </transition-group>
+            </draggable>
+          </div>
+          <!-- End Menu -->
 
-      <!-- <div class="col-md-6">
-        <draggable class="list-group" tag="span" v-model="list" v-bind="dragOptions" :move="onMove" @start="isDragging=true" @end="isDragging=false">
-          <transition-group type="transition" :name="'flip-list'" tag="ul">
-            <li class="list-group-item" v-for="element in list" :key="element.id">
-              <i class="fa-solid fa-grip-vertical"></i>
-              <i :class="element.fixed? 'fa fa-anchor' : 'glyphicon glyphicon-pushpin'" @click=" element.fixed=! element.fixed" aria-hidden="true"></i>
-              {{element.title}}
-              <span class="badge">{{element.id}}</span>
-            </li>
-          </transition-group>
-        </draggable>
-      </div> -->
-
-      <!-- <div class="col-md-6">
-        <draggable tag="span" v-model="list2" v-bind="dragOptions" :move="onMove">
-          <transition-group name="no" class="list-group" tag="ul">
-            <li class="list-group-item" v-for="element in list2" :key="element.id">
-              <i :class="element.fixed? 'fa fa-anchor' : 'glyphicon glyphicon-pushpin'" @click=" element.fixed=! element.fixed" aria-hidden="true"></i>
-              {{element.title}}
-              <span class="badge">{{element.id}}</span>
-            </li>
-          </transition-group>
-        </draggable>
-      </div> -->
-
+        </transition-group>
+      </draggable>
 
     </div>
     <div class="row mt-10">
@@ -148,7 +104,7 @@ export default {
     return {
       newNavItem: "",
       newNavItemError: "",
-      nav: {},
+      nav: [],
       isDragging: false,
       delayedDragging: false
     };
@@ -169,9 +125,18 @@ export default {
         (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
       );
     },
+    navItemsAlreadyContains(itemTitle) {
+      let found = false;
+      this.nav.forEach(item => {
+        if (item.title == itemTitle) {
+          found = true;
+        }
+      });
+      return found;
+    },
     addNewNavItem() {
       if (this.newNavItem == "") return;
-      if (this.newNavItem in this.nav) {
+      if (this.navItemsAlreadyContains(this.newNavItem)) {
         this.newNavItemError = "This item already exists.";
         return;
       } else {
@@ -180,10 +145,9 @@ export default {
       
       let id = this.slugify(this.newNavItem);
 
-      this.nav[id] = {
+      this.nav.push({
         title: this.newNavItem,
         id: this.uuidv4(),
-        order: Object.keys(this.nav).length + 1,
         fixed: false,
         links: [],
         newLink: {
@@ -193,13 +157,13 @@ export default {
           target: true,
           error: ""
         }
-      }
+      });
       this.newNavItem = "";
 
       // completely replace the object so view picks it up
-      this.nav = {
-        ...this.nav
-      };
+      // this.nav = {
+        // ...this.nav
+      // };
 
     },
     addNewLink(navItemId) {
@@ -230,7 +194,8 @@ export default {
         title: "",
         id: "",
         href: "",
-        target: true
+        target: true,
+        error: ""
       };
     },
     deleteLink(navItemId, linkId) {
@@ -244,16 +209,39 @@ export default {
     }
   },
   computed: {
-    dragOptions() {
+    dragOptionsParent() {
       return {
-        animation: 0,
-        group: "description",
+        animation: 200,
+        group: "parent",
         disabled: false,
-        ghostClass: "ghost"
+        ghostClass: "ghost",
+        filter: ".no-drag"
+      };
+    },
+    dragOptionsChild() {
+      return {
+        animation: 200,
+        group: "child",
+        disabled: false,
+        ghostClass: "ghost",
+        filter: ".no-drag"
       };
     },
     navString() {
-      return JSON.stringify(this.nav, null, 2);
+      let deepCopy = JSON.parse(JSON.stringify(this.nav));
+      let nav = deepCopy.map(item => {
+        delete item.newLink;
+        delete item.id;
+        delete item.fixed;
+        item.links.forEach((link) => {
+          delete link.id;
+          delete link.fixed;
+          delete link.error;
+        });
+        return item;
+      });
+      
+      return JSON.stringify(nav, null, 2);
     }
   },
   watch: {
